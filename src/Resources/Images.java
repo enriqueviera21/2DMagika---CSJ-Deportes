@@ -45,6 +45,7 @@ public class Images {
     public static BufferedImage[] FireBallDown;
     public static BufferedImage loading;
     public static BufferedImage spellGUI;
+    public static BufferedImage bush;
 
 
     public Images() {
@@ -105,7 +106,9 @@ public class Images {
             BTitle[1] = ImageIO.read(getClass().getResourceAsStream("/Buttons/BTitleP.png"));
             Options[0] = ImageIO.read(getClass().getResourceAsStream("/Buttons/Options.png"));
             Options[1] = ImageIO.read(getClass().getResourceAsStream("/Buttons/OptionsP.png"));
-
+            
+            //bush 
+            bush = ImageIO.read(getClass().getResourceAsStream("/Blocks/bush.png"));
             //icon
             icon = new ImageIcon(runesheet.crop(Rwidth*1,Rheight*0,Rwidth,Rheight));
 
