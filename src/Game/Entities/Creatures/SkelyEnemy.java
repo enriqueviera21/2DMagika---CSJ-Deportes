@@ -2,6 +2,7 @@ package Game.Entities.Creatures;
 
 import Game.Entities.EntityBase;
 import Game.Inventories.Inventory;
+import Game.Items.Item;
 import Main.Handler;
 import Resources.Animation;
 import Resources.Images;
@@ -36,7 +37,7 @@ public class SkelyEnemy extends CreatureBase  {
         bounds.width=16*2;
         bounds.height=14*2;
         speed=1.5f;
-        health=50;
+        health=1;
 
         SkelyCam= new Rectangle();
 
@@ -189,6 +190,7 @@ public class SkelyEnemy extends CreatureBase  {
 
     @Override
     public void die() {
-
+    		System.out.println("ded");
+    		handler.getWorld().getItemManager().addItem(Item.newSkullItem.createNew((int)x + bounds.x + (randint.nextInt(96) -32),(int)y + bounds.y+(randint.nextInt(32) -32),(randint.nextInt(3) +1)));
     }
 }

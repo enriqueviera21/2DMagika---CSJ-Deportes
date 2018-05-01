@@ -74,7 +74,7 @@ public class Rock extends StaticEntity {
         g.drawImage(Images.blocks[14],(int)(x-handler.getGameCamera().getxOffset()),(int)(y-handler.getGameCamera().getyOffset()),width,height,null);
 
     }
-
+  
     @Override
     public void die() {
         randint=new Random();

@@ -46,6 +46,8 @@ public class Images {
     public static BufferedImage loading;
     public static BufferedImage spellGUI;
     public static BufferedImage bush;
+    public static BufferedImage newStick;
+    public static BufferedImage newSkull;
 
 
     public Images() {
@@ -246,6 +248,11 @@ public class Images {
             SkelyEnemy_back[1]=newsheet.crop(164,227+130,width,height);
             SkelyEnemy_back[2]=newsheet.crop(196,227+130,width,height);
             SkelyEnemy_back[3]=newsheet.crop(228,227+130,28,height);
+            
+            //ME
+            newStick = ImageIO.read(getClass().getResourceAsStream("/Sheets/stick.png"));
+            newSkull = ImageIO.read(getClass().getResourceAsStream("/Sheets/skull.png"));
+            
 
         } catch (IOException e) {
             e.printStackTrace();
