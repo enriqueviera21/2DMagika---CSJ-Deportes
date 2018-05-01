@@ -38,6 +38,7 @@ public class Player extends CreatureBase {
     private Boolean LaunchedFireBallU=false;
     private Boolean LaunchedFireBallD=false;
     private Boolean attacking=false;
+    private Boolean regenerate=false;
 
     private int animWalkingSpeed = 150;
     private int animFireSpeed = 250;
@@ -117,10 +118,10 @@ public class Player extends CreatureBase {
         }else if(handler.getKeyManager().fattbut){
 
             fireAttack();
-
-
         }
-
+        // 
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_I))
+        	this.health=75;
 
         //Inventory
         inventory.tick();
