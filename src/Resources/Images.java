@@ -45,6 +45,7 @@ public class Images {
     public static BufferedImage[] FireBallDown;
     public static BufferedImage loading;
     public static BufferedImage spellGUI;
+    public static BufferedImage newStick;
 
 
     public Images() {
@@ -243,6 +244,10 @@ public class Images {
             SkelyEnemy_back[1]=newsheet.crop(164,227+130,width,height);
             SkelyEnemy_back[2]=newsheet.crop(196,227+130,width,height);
             SkelyEnemy_back[3]=newsheet.crop(228,227+130,28,height);
+            
+            //ME
+            newStick = ImageIO.read(getClass().getResourceAsStream("/Sheets/stick.png"));
+            
 
         } catch (IOException e) {
             e.printStackTrace();
