@@ -48,6 +48,8 @@ public class Images {
     public static BufferedImage bush;
     public static BufferedImage newStick;
     public static BufferedImage newSkull;
+    public static BufferedImage chest;
+    public static BufferedImage openedChest;
 
 
     public Images() {
@@ -109,8 +111,6 @@ public class Images {
             Options[0] = ImageIO.read(getClass().getResourceAsStream("/Buttons/Options.png"));
             Options[1] = ImageIO.read(getClass().getResourceAsStream("/Buttons/OptionsP.png"));
             
-            //bush 
-            bush = ImageIO.read(getClass().getResourceAsStream("/Blocks/bush.png"));
             //icon
             icon = new ImageIcon(runesheet.crop(Rwidth*1,Rheight*0,Rwidth,Rheight));
 
@@ -252,6 +252,11 @@ public class Images {
             //ME
             newStick = ImageIO.read(getClass().getResourceAsStream("/Sheets/stick.png"));
             newSkull = ImageIO.read(getClass().getResourceAsStream("/Sheets/skull.png"));
+            //bush 
+            bush = ImageIO.read(getClass().getResourceAsStream("/Blocks/bush.png"));
+            //chest 
+            chest = ImageIO.read(getClass().getResourceAsStream("/Sheets/chest.png"));
+            openedChest = ImageIO.read(getClass().getResourceAsStream("/Sheets/openedChest.png"));
             
 
         } catch (IOException e) {

@@ -157,6 +157,9 @@ public class Player extends CreatureBase {
             g.fillRect((int)(x-handler.getGameCamera().getxOffset()),(int)(y-handler.getGameCamera().getyOffset()-20),getHealth(),10);
 
         }
+        //ME
+      g.setFont(new Font("Lucida", Font.PLAIN, 13));//This is the default one so we can add string to other things.
+        //
         g.setColor(Color.white);
         g.drawString("Health: " + getHealth(),(int)(x-handler.getGameCamera().getxOffset()),(int)(y-handler.getGameCamera().getyOffset()-10));
 
