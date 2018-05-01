@@ -46,6 +46,7 @@ public class Images {
     public static BufferedImage loading;
     public static BufferedImage spellGUI;
     public static BufferedImage newStick;
+    public static BufferedImage newSkull;
 
 
     public Images() {
@@ -247,6 +248,7 @@ public class Images {
             
             //ME
             newStick = ImageIO.read(getClass().getResourceAsStream("/Sheets/stick.png"));
+            newSkull = ImageIO.read(getClass().getResourceAsStream("/Sheets/skull.png"));
             
 
         } catch (IOException e) {
