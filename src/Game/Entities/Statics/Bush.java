@@ -3,6 +3,7 @@ package Game.Entities.Statics;
 import java.awt.Graphics;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -18,11 +19,11 @@ import Main.Handler;
 import Resources.Images;
 
 public class Bush extends Tree{
-	 private File audioFile;
-	    private AudioInputStream audioStream;
-	    private AudioFormat format;
-	    private DataLine.Info info;
-	    private Clip audioClip;
+	private File audioFile;
+	private AudioInputStream audioStream;
+	private AudioFormat format;
+	private DataLine.Info info;
+	private Clip audioClip;
 
     public Bush(Handler handler, float x, float y) {
 	 super(handler, x, y);
@@ -50,7 +51,11 @@ public class Bush extends Tree{
      }
 
  }
-
+ @Override
+ public void die() {
+	 for(int i=0; i<new Random().nextInt(5)+2;i++) 
+		 handler.getWorld().getItemManager().addItem(Item.newStickItem.createNew((int)x + bounds.x,(int)y + bounds.y,1));
+ }
 
  @Override
  public void render(Graphics g) {
