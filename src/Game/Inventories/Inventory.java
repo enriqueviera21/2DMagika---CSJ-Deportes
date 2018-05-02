@@ -77,6 +77,9 @@ public class Inventory {
 
     //Inventory Methods
     private void renderItems(Graphics g) {
+    		//ME
+        g.setFont(new Font("Lucida", Font.PLAIN, 13));//This is the default one so we can add string to other things.
+        //
 
         if (inventoryItems.size() == 1) {
             g.drawImage(inventoryItems.get(0).getTexture(), 25, 24, inventoryItems.get(0).getWidth(), inventoryItems.get(0).getHeight(), null);

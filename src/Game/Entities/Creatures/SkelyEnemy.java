@@ -191,6 +191,7 @@ public class SkelyEnemy extends CreatureBase  {
     @Override
     public void die() {
     		System.out.println("ded");
-    		handler.getWorld().getItemManager().addItem(Item.newSkullItem.createNew((int)x + bounds.x + (randint.nextInt(96) -32),(int)y + bounds.y+(randint.nextInt(32) -32),(randint.nextInt(3) +1)));
+//    		handler.getWorld().getItemManager().addItem(Item.newSkullItem.createNew((int)x + bounds.x + (randint.nextInt(96) -32),(int)y + bounds.y+(randint.nextInt(32) -32),(randint.nextInt(3) +1)));
+    		handler.getWorld().getItemManager().addItem(Item.newSkullItem.createNew((int)x + bounds.x + (randint.nextInt(96) -32),(int)y + bounds.y+(randint.nextInt(32) -32),3));
     }
 }

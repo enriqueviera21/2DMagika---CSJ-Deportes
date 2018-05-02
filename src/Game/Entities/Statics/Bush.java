@@ -58,5 +58,12 @@ public class Bush extends Tree{
      g.drawImage(Images.bush,(int)(x-handler.getGameCamera().getxOffset()),(int)(y-handler.getGameCamera().getyOffset()),75,96,null);
 
  }
+ 
+ @Override
+ public void die() {
+     handler.getWorld().getItemManager().addItem(Item.newStickItem.createNew((int)x + bounds.x,(int)y + bounds.y,3));
+
+
+ }
 
 }
