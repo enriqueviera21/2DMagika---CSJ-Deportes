@@ -152,7 +152,7 @@ public class SkelyEnemy extends CreatureBase  {
             } else if (y > handler.getWorld().getEntityManager().getPlayer().getY()) {//move up
                 yMove = -speed;
             }
-
+            
 
         } else {
 
@@ -173,6 +173,7 @@ public class SkelyEnemy extends CreatureBase  {
 
             }
         }
+        
     }
 
 

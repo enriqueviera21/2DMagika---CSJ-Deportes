@@ -50,6 +50,10 @@ public class Images {
     public static BufferedImage newSkull;
     public static BufferedImage chest;
     public static BufferedImage openedChest;
+    public static BufferedImage[] mario_right;
+    public static BufferedImage[] mario_left;
+    public static BufferedImage[] mario_front;
+    public static BufferedImage[] mario_back;
 
 
     public Images() {
@@ -61,7 +65,7 @@ public class Images {
         SpriteSheet FireBallRightsheet = new SpriteSheet(Images.loadImage("/Sheets/FireBallRight.png"));
         SpriteSheet FireBallUpsheet = new SpriteSheet(Images.loadImage("/Sheets/FireBallUp.png"));
         SpriteSheet FireBallDownsheet = new SpriteSheet(Images.loadImage("/Sheets/FireBallDown.png"));
-
+        SpriteSheet mariosheet = new SpriteSheet(Images.loadImage("/Sheets/mario.png"));
 
 
         blocks = new BufferedImage[15];
@@ -75,6 +79,11 @@ public class Images {
         SkelyEnemy_right = new BufferedImage[4];
         SkelyEnemy_front = new BufferedImage[4];
         SkelyEnemy_back = new BufferedImage[4];
+        
+        mario_left = new BufferedImage[4];
+        mario_right = new BufferedImage[4];
+        mario_front = new BufferedImage[4];
+        mario_back = new BufferedImage[4];
 
         butstart = new BufferedImage[3];
         particleSmoke = new BufferedImage[3];
@@ -248,6 +257,29 @@ public class Images {
             SkelyEnemy_back[1]=newsheet.crop(164,227+130,width,height);
             SkelyEnemy_back[2]=newsheet.crop(196,227+130,width,height);
             SkelyEnemy_back[3]=newsheet.crop(228,227+130,28,height);
+            
+            //me
+            mario_back[1]=mariosheet.crop(0,0,45,63);
+            mario_back[0]=mariosheet.crop(45, 0, 45, 63);
+            mario_back[3]=mariosheet.crop(2*45, 0, 45, 63);
+            mario_back[2]=mariosheet.crop(45, 0, 45, 63);
+
+            
+            mario_right[1]=mariosheet.crop(0,63,45,63);
+            mario_right[0]=mariosheet.crop(45, 63, 45, 63);
+            mario_right[3]=mariosheet.crop(2*45, 63, 45, 63);
+            mario_right[2]=mariosheet.crop(45, 63, 45, 63);
+            
+            mario_front[1]=mariosheet.crop(0,63*2+1,45,64);
+            mario_front[0]=mariosheet.crop(45, 63*2+1, 45, 64);
+            mario_front[3]=mariosheet.crop(2*45, 63*2+1, 45, 64);
+            mario_front[2]=mariosheet.crop(45, 63*2+1, 45, 64);
+            
+            mario_left[1]=mariosheet.crop(0,63*3+1,45,64);
+            mario_left[0]=mariosheet.crop(45, 63*3+1, 45, 64);
+            mario_left[3]=mariosheet.crop(2*45, 63*3+1, 45, 64);
+            mario_left[2]=mariosheet.crop(45, 63*3+1, 45, 64);
+
             
             //ME
             newStick = ImageIO.read(getClass().getResourceAsStream("/Sheets/stick.png"));
