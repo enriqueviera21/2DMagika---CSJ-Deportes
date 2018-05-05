@@ -29,9 +29,8 @@ public class Chest extends StaticEntity {
     public static boolean completedQuest = false;
     
 
-    public Chest(Handler handler, float x, float y,BaseWorld world) {
+    public Chest(Handler handler, float x, float y) {
         super(handler, x, y, 80, 125);
-        this.world=world;
         health=10000000;
         bounds.x=0;
         bounds.y=0;
@@ -83,7 +82,7 @@ public class Chest extends StaticEntity {
         if (chestStateImage == Images.openedChest) {
         		g.setColor(Color.BLACK);
         		g.setFont(new Font("Lucida", Font.BOLD, 20));
-    			g.drawString("Sticks:" + stickesPicked + "\nSkulls:" + skullsPicked,(int)(x-handler.getGameCamera().getxOffset()-10),(int)(y-handler.getGameCamera().getyOffset()-30));
+    			g.drawString("Sticks:" + stickesPicked + "   Skulls:" + skullsPicked,(int)(x-handler.getGameCamera().getxOffset()-10),(int)(y-handler.getGameCamera().getyOffset()-30));
     			g.drawString("Items needed:",(int)(x-handler.getGameCamera().getxOffset()),(int)(y-handler.getGameCamera().getyOffset()-10));
         }
     }

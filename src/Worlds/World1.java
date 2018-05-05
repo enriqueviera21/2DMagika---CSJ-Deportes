@@ -12,11 +12,13 @@ public class World1 extends BaseWorld{
 
     private Handler handler;
     private BaseWorld caveWorld;
+    private BaseWorld map2World;
 
     public World1(Handler handler, String path, Player player){
         super(handler,path,player);
         this.handler = handler;
         caveWorld = new CaveWorld(handler,"res/Maps/caveMap.map",player);
+        map2World = new CaveWorld(handler,"res/Maps/map2.map",player);
 
         entityManager.addEntity(new Tree(handler, 100, 250));
         entityManager.addEntity(new Rock(handler, 100, 450));
@@ -26,10 +28,11 @@ public class World1 extends BaseWorld{
         entityManager.addEntity(new Rock(handler, 88, 1345));
         entityManager.addEntity(new Tree(handler, 77, 700));
         entityManager.addEntity(new Rock(handler, 700, 83));
-        entityManager.addEntity(new Door(handler, 100, 0,caveWorld));
-        entityManager.addEntity(new SkelyEnemy(handler, 1250, 500));
+        entityManager.addEntity(new Door(handler, 100, 0, map2World));
+//        entityManager.addEntity(new SkelyEnemy(handler, 1250, 500));
+        entityManager.addEntity(new SkelyEnemy(handler, 1000, 500));
         entityManager.addEntity(new Bush(handler, 200, 200));
-        entityManager.addEntity(new Chest(handler, 400, 200,caveWorld));
+        entityManager.addEntity(new Chest(handler, 450, 200));
 
         entityManager.getPlayer().setX(spawnX);
         entityManager.getPlayer().setY(spawnY);
