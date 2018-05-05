@@ -120,9 +120,11 @@ public class Player extends CreatureBase {
 
             fireAttack();
         }
-        // 
+        //ME
         if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_I))
         	this.health=75;
+        
+        
 
         //Inventory
         inventory.tick();
