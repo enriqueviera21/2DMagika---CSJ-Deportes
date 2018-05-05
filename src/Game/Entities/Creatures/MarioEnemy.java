@@ -6,14 +6,16 @@ import java.awt.Rectangle;
 import java.util.Random;
 
 import Game.Entities.EntityBase;
+import Game.Entities.Statics.StaticEntity;
 import Game.Inventories.Inventory;
 import Game.Items.Item;
+import Main.Game;
 import Main.Handler;
 import Resources.Animation;
 import Resources.Images;
 
 public class MarioEnemy extends SkelyEnemy{
-	private Animation animDown, animUp, animLeft, animRight;
+	private Animation animDown, animUp, animLeft, animRight,explosion;
 
     private Boolean attacking=false;
 
@@ -26,6 +28,7 @@ public class MarioEnemy extends SkelyEnemy{
     private Random randint;
     private int moveCount=0;
     private int direction;
+    private int area=100;
 
     public MarioEnemy(Handler handler, float x, float y) {
         super(handler, x, y);
@@ -47,6 +50,7 @@ public class MarioEnemy extends SkelyEnemy{
         animLeft = new Animation(animWalkingSpeed,Images.mario_left);
         animRight = new Animation(animWalkingSpeed,Images.mario_right);
         animUp = new Animation(animWalkingSpeed,Images.mario_back);
+        explosion = new Animation(100, Images.explosion);
 
         Marioinventory= new Inventory(handler);
     }
@@ -199,7 +203,61 @@ public class MarioEnemy extends SkelyEnemy{
         }
     }
 
+	public void explosionArea(Graphics g) {
+		//buscar como meter el graphics
+		for(EntityBase e : handler.getWorld().getEntityManager().getEntities()) {
+		if(!e.equals(handler.getWorld().getEntityManager().getPlayer())) {	
+		try{if((e.getX()<x+area&&e.getX()>x-area)&&(e.getY()<y+area&&e.getY()>y-area)) {
+			e.die();
+		    g.drawImage(getCurrentAnimationFrame(explosion, null, null, null, Images.explosion, null, null, null), (int)(e.getX()), (int)(e.getY()), e.getWidth(), e.getHeight(), null);
+		}}catch(Exception x) {
+			area--;
+			explosionArea(g);
+		}}}
+		area=100;
+	}
+	@Override // meter explosionArea
+	public void checkAttacks(){
+        attackTimer += System.currentTimeMillis() - lastAttackTimer;
+        lastAttackTimer = System.currentTimeMillis();
+        if(attackTimer < attackCooldown)
+            return;
 
+        Rectangle cb = getCollisionBounds(0, 0);
+        Rectangle ar = new Rectangle();
+        int arSize = 20;
+        ar.width = arSize;
+        ar.height = arSize;
+
+        if(lu){
+            ar.x = cb.x + cb.width / 2 - arSize / 2;
+            ar.y = cb.y - arSize;
+        }else if(ld){
+            ar.x = cb.x + cb.width / 2 - arSize / 2;
+            ar.y = cb.y + cb.height;
+        }else if(ll){
+            ar.x = cb.x - arSize;
+            ar.y = cb.y + cb.height / 2 - arSize / 2;
+        }else if(lr){
+            ar.x = cb.x + cb.width;
+            ar.y = cb.y + cb.height / 2 - arSize / 2;
+        }else{
+            return;
+        }
+
+        attackTimer = 0;
+
+        for(EntityBase e : handler.getWorld().getEntityManager().getEntities()){
+            if(e.equals(this))
+                continue;
+            if(e.getCollisionBounds(0, 0).intersects(ar)){
+                e.hurt(attack);
+                System.out.println(e + " has " + e.getHealth() + " lives.");
+                return;
+            }
+        }
+
+    }
 
 
 

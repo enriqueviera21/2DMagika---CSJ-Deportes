@@ -54,7 +54,7 @@ public class Images {
     public static BufferedImage[] mario_left;
     public static BufferedImage[] mario_front;
     public static BufferedImage[] mario_back;
-
+    public static BufferedImage[] explosion;
 
     public Images() {
 
@@ -66,7 +66,7 @@ public class Images {
         SpriteSheet FireBallUpsheet = new SpriteSheet(Images.loadImage("/Sheets/FireBallUp.png"));
         SpriteSheet FireBallDownsheet = new SpriteSheet(Images.loadImage("/Sheets/FireBallDown.png"));
         SpriteSheet mariosheet = new SpriteSheet(Images.loadImage("/Sheets/mario.png"));
-
+        SpriteSheet explosionsheet = new SpriteSheet(Images.loadImage("/Sheets/explosion.png"));
 
         blocks = new BufferedImage[15];
 
@@ -98,8 +98,8 @@ public class Images {
         FireBallRight = new BufferedImage[6];
         FireBallUp = new BufferedImage[6];
         FireBallDown = new BufferedImage[6];
-
-
+        
+        explosion = new BufferedImage[5];
 
 
         try {
@@ -280,7 +280,10 @@ public class Images {
             mario_left[3]=mariosheet.crop(2*45, 63*3+1, 45, 64);
             mario_left[2]=mariosheet.crop(45, 63*3+1, 45, 64);
 
-            
+            explosion[0]=explosionsheet.crop(0, 0, 64, 128);
+            explosion[1]=explosionsheet.crop(64, 0, 64, 128);
+            explosion[2]=explosionsheet.crop(128, 0, 64, 128);
+            explosion[3]=explosionsheet.crop(192, 0, 64, 128);
             //ME
             newStick = ImageIO.read(getClass().getResourceAsStream("/Sheets/stick.png"));
             newSkull = ImageIO.read(getClass().getResourceAsStream("/Sheets/skull.png"));
