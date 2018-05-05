@@ -2,10 +2,13 @@ package Worlds;
 
 import java.awt.event.KeyEvent;
 
-import Game.Entities.EntityBase;
+import javax.swing.JOptionPane;
+
 import Game.Entities.Creatures.Player;
 import Game.Entities.Creatures.SkelyEnemy;
-import Game.Entities.Statics.*;
+import Game.Entities.Statics.Bush;
+import Game.Entities.Statics.Rock;
+import Game.Entities.Statics.Tree;
 import Game.GameStates.State;
 import Game.Items.Item;
 import Main.Handler;
@@ -17,12 +20,26 @@ public class World2 extends BaseWorld{
 
     private Handler handler;
     private boolean spawnLoot = true;
+    private boolean hasWon = true;
 
     public World2(Handler handler, String path, Player player){
         super(handler,path,player);
         this.handler = handler;
 
-        entityManager.addEntity(new Tree(handler, 100, 250));
+        entityManager.addEntity(new Tree(handler, 510, 130));
+        entityManager.addEntity(new Tree(handler, 900, 500));
+        entityManager.addEntity(new Rock(handler, 584, 754));
+        entityManager.addEntity(new SkelyEnemy(handler, 400, 112));
+        entityManager.addEntity(new SkelyEnemy(handler, 400, 160));
+        entityManager.addEntity(new SkelyEnemy(handler, 400, 211));
+        entityManager.addEntity(new Bush(handler, 210, 130));
+        entityManager.addEntity(new Tree(handler, 210, 190));
+        entityManager.addEntity(new Bush(handler, 210, 240));
+        entityManager.addEntity(new Tree(handler, 140, 250));
+        entityManager.addEntity(new Tree(handler, 135, 75));
+        
+        
+        
         entityManager.addEntity(new Rock(handler, 100, 450));
         entityManager.addEntity(new Tree(handler, 533, 276));
         entityManager.addEntity(new Rock(handler, 684, 1370));
@@ -30,8 +47,8 @@ public class World2 extends BaseWorld{
         entityManager.addEntity(new Rock(handler, 88, 1345));
         entityManager.addEntity(new Tree(handler, 77, 700));
         entityManager.addEntity(new Rock(handler, 700, 83));
-        entityManager.addEntity(new SkelyEnemy(handler, 1000, 500));
-        entityManager.addEntity(new Bush(handler, 200, 200));
+//        entityManager.addEntity(new SkelyEnemy(handler, 1000, 500));
+//        entityManager.addEntity(new Bush(handler, 200, 200));
 
         entityManager.getPlayer().setX(spawnX);
         entityManager.getPlayer().setY(spawnY);
@@ -58,8 +75,17 @@ public class World2 extends BaseWorld{
         }
     	
     	if (spawnLoot) { //Spawn the loot once on start
+    		handler.getWorld().getItemManager().addItem(Item.fireRuneItem.createNew(145,200,1));
+    		handler.getWorld().getItemManager().addItem(Item.fireRuneItem.createNew(145,250,1));
     		handler.getWorld().getItemManager().addItem(Item.newWhiteLootBag.createNew(1110,275,1));
     		spawnLoot = false;
+    	}
+    	
+    	if ((entityManager.getPlayer().getX() > 1100) && (entityManager.getPlayer().getY() > 1100)) {
+    		if (hasWon) {
+    			JOptionPane.showMessageDialog(null, "You win!");
+    			hasWon = false;
+    		}
     	}
     }
 
