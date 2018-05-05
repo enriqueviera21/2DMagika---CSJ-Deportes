@@ -32,6 +32,7 @@ public class Item {
     public static Item fireRuneItem = new Item(Images.Runes[2],"Fire Rune",2);
     public static Item newStickItem = new Item(Images.newStick,"Stick",3);
     public static Item newSkullItem = new Item(Images.newSkull,"Skull",4);
+    public static Item newWhiteLootBag = new Item(Images.whiteLootBag, "Loot", 5);
 
 
     //class
@@ -80,6 +81,7 @@ public class Item {
     }
 
     public Item createNew(int x, int y,int count){
+//    	System.out.println("x: " + x + "\ty: " + y);
         Item i = new Item(texture,name,id);
         i.setCount(count);
         i.setPosition(x,y);
