@@ -63,5 +63,7 @@ public class Bush extends Tree{
      g.drawImage(Images.bush,(int)(x-handler.getGameCamera().getxOffset()),(int)(y-handler.getGameCamera().getyOffset()),75,96,null);
 
  }
+ 
+
 
 }

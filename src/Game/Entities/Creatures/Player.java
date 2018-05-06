@@ -1,6 +1,7 @@
 package Game.Entities.Creatures;
 
 import Game.Entities.EntityBase;
+import Game.Entities.Statics.Chest;
 import Game.GameStates.State;
 import Game.Inventories.Inventory;
 import Game.Items.Item;
@@ -11,6 +12,8 @@ import Main.Handler;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+
+import javax.swing.JOptionPane;
 
 /**
  * Created by Elemental on 1/1/2017.
@@ -119,9 +122,11 @@ public class Player extends CreatureBase {
 
             fireAttack();
         }
-        // 
+        //ME
         if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_I))
         	this.health=75;
+        
+        
 
         //Inventory
         inventory.tick();
@@ -138,7 +143,7 @@ public class Player extends CreatureBase {
             FireBallAttack(g);
 
         }
-
+        
 
 
 
@@ -158,7 +163,7 @@ public class Player extends CreatureBase {
 
         }
         //ME
-      g.setFont(new Font("Lucida", Font.PLAIN, 13));//This is the default one so we can add string to other things.
+        g.setFont(new Font("Lucida", Font.PLAIN, 13));//This is the default one so we can add string to other things.
         //
         g.setColor(Color.white);
         g.drawString("Health: " + getHealth(),(int)(x-handler.getGameCamera().getxOffset()),(int)(y-handler.getGameCamera().getyOffset()-10));
@@ -244,7 +249,7 @@ public class Player extends CreatureBase {
 
     @Override
     public void die(){
-        System.out.println("You lose");
+    	JOptionPane.showMessageDialog(null, "You lost!");
         State.setState(handler.getGame().menuState);
     }
 
@@ -364,4 +369,48 @@ public class Player extends CreatureBase {
     public SpellCastUI getSpellGUI() {
         return spellGUI;
     }
+    
+    
+    //ME
+    public void itemsToChest() {
+    		if (!(Chest.ePressedStatic))
+    			return;
+        for (Item i : getInventory().getInventoryItems()) {
+        		int count = 0;
+        		while (count < i.getCount()){
+        			if (i.getName() == "Stick") {
+        				if (Chest.stickesPicked < 3) {
+	                    i.setCount(i.getCount() - 1);
+	                    Chest.stickesPicked ++;
+        				}
+                }else if (i.getName() == "Skull") {
+        				if (Chest.skullsPicked < 3) {
+	                    i.setCount(i.getCount() - 1);
+	                    Chest.skullsPicked ++;
+        				}
+                }
+        			count ++;
+        			
+        		}
+            
+        }
+        return;
+    }
+    public boolean checkIfHasWinLevel2() {
+    	int skullAmount = 0;
+		int lootBagAmount = 0;
+	    for (Item i : getInventory().getInventoryItems()) {
+    		if (i.getName() == "Skull") {
+    			skullAmount =+ i.getCount();
+    		}else if (i.getName() == "LootBag") {
+    			lootBagAmount =+ i.getCount();
+    		}
+	    }
+	    //Things needed to win
+	    if (skullAmount >= 9)
+	    	if (lootBagAmount >= 1)
+	    		return true;
+	    
+	    return false;
+}
 }

@@ -55,6 +55,8 @@ public class Images {
     public static BufferedImage[] mario_front;
     public static BufferedImage[] mario_back;
     public static BufferedImage[] explosion;
+    public static BufferedImage whiteLootBag;
+
 
     public Images() {
 
@@ -292,7 +294,8 @@ public class Images {
             //chest 
             chest = ImageIO.read(getClass().getResourceAsStream("/Sheets/chest.png"));
             openedChest = ImageIO.read(getClass().getResourceAsStream("/Sheets/openedChest.png"));
-            
+            //whiteLoogbag
+            whiteLootBag = ImageIO.read(getClass().getResourceAsStream("/Sheets/whiteLootBag.png"));
 
         } catch (IOException e) {
             e.printStackTrace();
