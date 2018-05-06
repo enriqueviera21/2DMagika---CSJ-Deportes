@@ -13,6 +13,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
+import javax.swing.JOptionPane;
+
 /**
  * Created by Elemental on 1/1/2017.
  */
@@ -141,7 +143,7 @@ public class Player extends CreatureBase {
             FireBallAttack(g);
 
         }
-
+        
 
 
 
@@ -247,7 +249,7 @@ public class Player extends CreatureBase {
 
     @Override
     public void die(){
-        System.out.println("You lose");
+    	JOptionPane.showMessageDialog(null, "You lost!");
         State.setState(handler.getGame().menuState);
     }
 

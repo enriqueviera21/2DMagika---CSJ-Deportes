@@ -1,5 +1,8 @@
 package Worlds;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JOptionPane;
@@ -11,6 +14,7 @@ import Game.Entities.Statics.Rock;
 import Game.Entities.Statics.Tree;
 import Game.GameStates.State;
 import Game.Items.Item;
+import Game.Tiles.Tile;
 import Main.Handler;
 
 /**
@@ -85,9 +89,40 @@ public class World2 extends BaseWorld{
     	if ((entityManager.getPlayer().getX() > 1100) && (entityManager.getPlayer().getY() > 1100) && (handler.getWorld().getEntityManager().getPlayer().checkIfHasWinLevel2())) {
     		if (!hasWon) {
     			JOptionPane.showMessageDialog(null, "You win!");
+    			System.exit(0);
     			hasWon = true;
     		}
     	}
+    }
+    
+    @Override
+    public void render(Graphics g){
+        int xStart = (int) Math.max(0, handler.getGameCamera().getxOffset() / Tile.TILEWIDTH);
+        int xEnd = (int) Math.min(width, (handler.getGameCamera().getxOffset() + handler.getWidth()) / Tile.TILEWIDTH + 1);
+        int yStart = (int) Math.max(0, handler.getGameCamera().getyOffset() / Tile.TILEHEIGHT);
+        int yEnd = (int) Math.min(height, (handler.getGameCamera().getyOffset() + handler.getHeight()) / Tile.TILEHEIGHT + 1);
+
+        for(int y = yStart;y < yEnd;y++){
+            for(int x = xStart;x < xEnd;x++){
+                getTile(x, y).render(g, (int) (x * Tile.TILEWIDTH - handler.getGameCamera().getxOffset()),
+                        (int) (y * Tile.TILEHEIGHT - handler.getGameCamera().getyOffset()));
+            }
+        }
+
+        //Item
+        itemManager.render(g);
+        //Entities
+        entityManager.render(g);
+
+        entityManager.getPlayer().getInventory().render(g);
+        entityManager.getPlayer().getSpellGUI().render(g);
+		
+		//ME
+        g.setColor(Color.CYAN);
+        g.setFont(new Font("Lucida", Font.BOLD, 22));//This is the default one so we can add string to other things.
+		g.drawString("You need to kill all enemies and collect the white loot bag!", 100, 90);
+		g.drawString("Checkpoint is marked by 4 dirt blocks.", 200, 120);
+
     }
 
 }
