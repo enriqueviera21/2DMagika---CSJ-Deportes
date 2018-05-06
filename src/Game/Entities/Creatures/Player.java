@@ -394,4 +394,21 @@ public class Player extends CreatureBase {
         }
         return;
     }
+    public boolean checkIfHasWinLevel2() {
+    	int skullAmount = 0;
+		int lootBagAmount = 0;
+	    for (Item i : getInventory().getInventoryItems()) {
+    		if (i.getName() == "Skull") {
+    			skullAmount =+ i.getCount();
+    		}else if (i.getName() == "LootBag") {
+    			lootBagAmount =+ i.getCount();
+    		}
+	    }
+	    //Things needed to win
+	    if (skullAmount >= 9)
+	    	if (lootBagAmount >= 1)
+	    		return true;
+	    
+	    return false;
+}
 }

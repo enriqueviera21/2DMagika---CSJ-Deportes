@@ -32,7 +32,7 @@ public class Item {
     public static Item fireRuneItem = new Item(Images.Runes[2],"Fire Rune",2);
     public static Item newStickItem = new Item(Images.newStick,"Stick",3);
     public static Item newSkullItem = new Item(Images.newSkull,"Skull",4);
-    public static Item newWhiteLootBag = new Item(Images.whiteLootBag, "Loot", 5);
+    public static Item newWhiteLootBag = new Item(Images.whiteLootBag, "LootBag", 5);
 
 
     //class

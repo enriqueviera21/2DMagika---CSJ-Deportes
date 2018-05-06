@@ -20,7 +20,7 @@ public class World2 extends BaseWorld{
 
     private Handler handler;
     private boolean spawnLoot = true;
-    private boolean hasWon = true;
+    private boolean hasWon = false;
 
     public World2(Handler handler, String path, Player player){
         super(handler,path,player);
@@ -81,10 +81,11 @@ public class World2 extends BaseWorld{
     		spawnLoot = false;
     	}
     	
-    	if ((entityManager.getPlayer().getX() > 1100) && (entityManager.getPlayer().getY() > 1100)) {
-    		if (hasWon) {
+    	//Win Condition
+    	if ((entityManager.getPlayer().getX() > 1100) && (entityManager.getPlayer().getY() > 1100) && (handler.getWorld().getEntityManager().getPlayer().checkIfHasWinLevel2())) {
+    		if (!hasWon) {
     			JOptionPane.showMessageDialog(null, "You win!");
-    			hasWon = false;
+    			hasWon = true;
     		}
     	}
     }
