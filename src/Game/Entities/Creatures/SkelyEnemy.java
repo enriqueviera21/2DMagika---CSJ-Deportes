@@ -37,7 +37,7 @@ public class SkelyEnemy extends CreatureBase  {
         bounds.width=16*2;
         bounds.height=14*2;
         speed=1.5f;
-        health=16;
+        health=1;
 
         SkelyCam= new Rectangle();
 
@@ -180,10 +180,10 @@ public class SkelyEnemy extends CreatureBase  {
     @Override
     public void render(Graphics g) {
         g.drawImage(getCurrentAnimationFrame(animDown,animUp,animLeft,animRight,Images.SkelyEnemy_front,Images.SkelyEnemy_back,Images.SkelyEnemy_left,Images.SkelyEnemy_right), (int) (x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), width, height, null);
-        if(isBeinghurt() && healthcounter<=120){
-            g.setColor(Color.white);
-            g.drawString("SkelyHealth: " + getHealth(),(int) (x-handler.getGameCamera().getxOffset()),(int) (y-handler.getGameCamera().getyOffset()-20));
-        }
+//        if(isBeinghurt() && healthcounter<=120){
+//            g.setColor(Color.white);
+//            g.drawString("SkelyHealth: " + getHealth(),(int) (x-handler.getGameCamera().getxOffset()),(int) (y-handler.getGameCamera().getyOffset()-20));
+//        }
         
         g.setColor(Color.BLACK);
         g.drawRect((int)(x-handler.getGameCamera().getxOffset()-1),(int)(y-handler.getGameCamera().getyOffset()-21),76,11);
@@ -204,7 +204,7 @@ public class SkelyEnemy extends CreatureBase  {
         g.setFont(new Font("Lucida", Font.PLAIN, 13));//This is the default one so we can add string to other things.
         //
         g.setColor(Color.white);
-        g.drawString("Skely Health: " + getHealth(),(int)(x-handler.getGameCamera().getxOffset()),(int)(y-handler.getGameCamera().getyOffset()-10));
+        g.drawString("Health: " + getHealth(),(int)(x-handler.getGameCamera().getxOffset()),(int)(y-handler.getGameCamera().getyOffset()-10));
         
         
     }

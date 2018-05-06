@@ -1,6 +1,7 @@
 package Worlds;
-import Game.Entities.Creatures.MarioEnemy;
+
 import java.awt.event.KeyEvent;
+
 import Game.Entities.Creatures.Player;
 import Game.Entities.Creatures.SkelyEnemy;
 import Game.Entities.Statics.*;
@@ -30,16 +31,13 @@ public class World1 extends BaseWorld{
         entityManager.addEntity(new Rock(handler, 88, 1345));
         entityManager.addEntity(new Tree(handler, 77, 700));
         entityManager.addEntity(new Rock(handler, 700, 83));
-        entityManager.addEntity(new Door(handler, 100, 0,caveWorld));
-        entityManager.addEntity(new SkelyEnemy(handler, 1250, 500));
-        entityManager.addEntity(new Bush(handler, 200, 200));
-        entityManager.addEntity(new Chest(handler, 400, 200));
-        entityManager.addEntity(new MarioEnemy(handler,400,400));
         entityManager.addEntity(new Door(handler, 100, 0, map2World));
 //        entityManager.addEntity(new SkelyEnemy(handler, 1250, 500));
         entityManager.addEntity(new SkelyEnemy(handler, 1000, 500));
-        entityManager.addEntity(new Bush(handler, 400, 1200));
         entityManager.addEntity(new Chest(handler, 450, 200));
+        entityManager.addEntity(new Bush(handler, 400, 1200));
+        entityManager.addEntity(new Bush(handler, 341, 442));
+        entityManager.addEntity(new Bush(handler, 1000, 642));
 
         entityManager.getPlayer().setX(spawnX);
         entityManager.getPlayer().setY(spawnY);
@@ -61,6 +59,14 @@ public class World1 extends BaseWorld{
         }
     	if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_N)) {
     		handler.setWorld(map2World);
+    		//Coordinates to spawn in world2
+    		entityManager.getPlayer().setX(70);
+            entityManager.getPlayer().setY(180);
+        }
+    	
+    	//FOR DEBUGGING! PLEASE REMOVE AFTER!
+    	if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_G)) {
+    		System.out.println(entityManager.getPlayer().getX() + "\t" + entityManager.getPlayer().getY());
         }
     }
 

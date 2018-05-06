@@ -53,7 +53,7 @@ public class Bush extends Tree{
  }
  @Override
  public void die() {
-	 for(int i=0; i<new Random().nextInt(5)+2;i++) 
+	 for(int i=0; i<new Random().nextInt(3)+1;i++) 
 		 handler.getWorld().getItemManager().addItem(Item.newStickItem.createNew((int)x + bounds.x,(int)y + bounds.y,1));
  }
 

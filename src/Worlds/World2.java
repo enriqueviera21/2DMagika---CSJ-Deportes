@@ -32,7 +32,7 @@ public class World2 extends BaseWorld{
 
         entityManager.addEntity(new Tree(handler, 510, 130));
         entityManager.addEntity(new Tree(handler, 900, 500));
-        entityManager.addEntity(new Rock(handler, 584, 754));
+        entityManager.addEntity(new Rock(handler, 584, 770));
         entityManager.addEntity(new SkelyEnemy(handler, 400, 112));
         entityManager.addEntity(new SkelyEnemy(handler, 400, 160));
         entityManager.addEntity(new SkelyEnemy(handler, 400, 211));
@@ -47,12 +47,15 @@ public class World2 extends BaseWorld{
         entityManager.addEntity(new Rock(handler, 100, 450));
         entityManager.addEntity(new Tree(handler, 533, 276));
         entityManager.addEntity(new Rock(handler, 684, 1370));
-        entityManager.addEntity(new Tree(handler, 765, 888));
         entityManager.addEntity(new Rock(handler, 88, 1345));
         entityManager.addEntity(new Tree(handler, 77, 700));
         entityManager.addEntity(new Rock(handler, 700, 83));
-//        entityManager.addEntity(new SkelyEnemy(handler, 1000, 500));
-//        entityManager.addEntity(new Bush(handler, 200, 200));
+        
+        //Items on bottom map
+        entityManager.addEntity(new Tree(handler, 195, 875));
+        entityManager.addEntity(new Tree(handler, 195, 975));
+        entityManager.addEntity(new Tree(handler, 1025, 875));
+        entityManager.addEntity(new Tree(handler, 1025, 975));
 
         entityManager.getPlayer().setX(spawnX);
         entityManager.getPlayer().setY(spawnY);
@@ -74,7 +77,7 @@ public class World2 extends BaseWorld{
         }
         
         //FOR DEBUGGING! PLEASE REMOVE AFTER!
-    	if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_N)) {
+    	if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_G)) {
     		System.out.println(entityManager.getPlayer().getX() + "\t" + entityManager.getPlayer().getY());
         }
     	
@@ -86,12 +89,14 @@ public class World2 extends BaseWorld{
     	}
     	
     	//Win Condition
-    	if ((entityManager.getPlayer().getX() > 1100) && (entityManager.getPlayer().getY() > 1100) && (handler.getWorld().getEntityManager().getPlayer().checkIfHasWinLevel2())) {
-    		if (!hasWon) {
+    	if (((entityManager.getPlayer().getX() > 575) && (entityManager.getPlayer().getX() < 650))
+    			&& ((entityManager.getPlayer().getY() > 940) && (entityManager.getPlayer().getY() < 1025))
+    			&& (handler.getWorld().getEntityManager().getPlayer().checkIfHasWinLevel2())) {
+//    		if (!hasWon) {
     			JOptionPane.showMessageDialog(null, "You win!");
     			System.exit(0);
     			hasWon = true;
-    		}
+//    		}
     	}
     }
     

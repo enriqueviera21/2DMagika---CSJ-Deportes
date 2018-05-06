@@ -71,10 +71,8 @@ public class Door extends StaticEntity {
         
 //        System.out.println((ir.contains(pr)) + "\t" + EP);
         if(ir.contains(pr) && !EP){
-        	System.out.println("Condition 1");
             g.drawImage(Images.E,(int) x+width,(int) y+10,32,32,null);
         }else if(ir.contains(pr) && EP){
-        	System.out.println("Condition 2");
             g.drawImage(Images.EP,(int) x+width,(int) y+10,32,32,null);
             g.drawImage(Images.loading,0,0,800,600,null);
             handler.setWorld(world);
