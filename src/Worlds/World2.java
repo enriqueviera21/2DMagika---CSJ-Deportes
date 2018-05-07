@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JOptionPane;
 
+import Game.Entities.Creatures.MarioEnemy;
 import Game.Entities.Creatures.Player;
 import Game.Entities.Creatures.SkelyEnemy;
 import Game.Entities.Statics.Bush;
@@ -56,6 +57,7 @@ public class World2 extends BaseWorld{
         entityManager.addEntity(new Tree(handler, 195, 975));
         entityManager.addEntity(new Tree(handler, 1025, 875));
         entityManager.addEntity(new Tree(handler, 1025, 975));
+        entityManager.addEntity(new MarioEnemy(handler, 617, 970));
 
         entityManager.getPlayer().setX(spawnX);
         entityManager.getPlayer().setY(spawnY);

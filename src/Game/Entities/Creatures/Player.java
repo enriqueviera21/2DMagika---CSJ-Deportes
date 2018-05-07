@@ -43,7 +43,7 @@ public class Player extends CreatureBase {
     private Boolean attacking=false;
     private Boolean regenerate=false;
 
-    private int animWalkingSpeed = 150;
+    private int animWalkingSpeed = 200;
     private int animFireSpeed = 250;
     private int FireSpeed = 2;
     private int FireMove = 0;

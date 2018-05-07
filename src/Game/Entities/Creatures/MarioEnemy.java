@@ -3,6 +3,8 @@ package Game.Entities.Creatures;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.datatransfer.SystemFlavorMap;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 import Game.Entities.EntityBase;
@@ -29,9 +31,25 @@ public class MarioEnemy extends SkelyEnemy{
     private int moveCount=0;
     private int direction;
     private int area=100;
+    
+    private Animation animFireATT,animFireATTR,animFireATTU,animFireATTD;
+    private Boolean fcactive=true;
+    private Boolean FireBall=false;
+    private Boolean LaunchedFireBall=false;
+    private Boolean LaunchedFireBallL=false;
+    private Boolean LaunchedFireBallR=false;
+    private Boolean LaunchedFireBallU=false;
+    private Boolean LaunchedFireBallD=false;
+    private EntityBase exploded;
+    private Boolean isExplosion=false;
+    private int animFireSpeed = 250;
+    private int FireSpeed = 2;
+    private int FireMove = 0;
+    private int movexp,moveyp,movexn,moveyn,tempmoveyp,tempmovexn,tempmoveyn,tempmovexp,fy,fx;
 
     public MarioEnemy(Handler handler, float x, float y) {
         super(handler, x, y);
+        attackCooldown=800;
         bounds.x=8*2;
         bounds.y=18*2;
         bounds.width=16*2;
@@ -51,6 +69,10 @@ public class MarioEnemy extends SkelyEnemy{
         animRight = new Animation(animWalkingSpeed,Images.mario_right);
         animUp = new Animation(animWalkingSpeed,Images.mario_back);
         explosion = new Animation(100, Images.explosion);
+        animFireATT = new Animation(animFireSpeed,Images.FireBallLeft);
+        animFireATTR = new Animation(animFireSpeed,Images.FireBallRight);
+        animFireATTU = new Animation(animFireSpeed,Images.FireBallUp);
+        animFireATTD = new Animation(animFireSpeed,Images.FireBallDown);
 
         Marioinventory= new Inventory(handler);
     }
@@ -61,6 +83,12 @@ public class MarioEnemy extends SkelyEnemy{
             g.setColor(Color.white);
             g.drawString("SkelyHealth: " + getHealth(),(int) (x-handler.getGameCamera().getxOffset()),(int) (y-handler.getGameCamera().getyOffset()-20));
         }
+        if(FireBall) {
+        	MarioFireBallAttack(g);
+        }
+//        if(isExplosion){
+//		    g.drawImage(getCurrentAnimationFrame(explosion, explosion, explosion, explosion, Images.explosion, null, null, null), (int)(exploded.getX()), (int)(exploded.getY()), exploded.getWidth(), exploded.getHeight(), null);
+//        }
     }
     @Override
     public void tick() {
@@ -68,6 +96,10 @@ public class MarioEnemy extends SkelyEnemy{
         animUp.tick();
         animRight.tick();
         animLeft.tick();
+        animFireATT.tick();
+        animFireATTR.tick();
+        animFireATTU.tick();
+        animFireATTD.tick();
 
         moveCount ++;
         if(moveCount>=60){
@@ -77,7 +109,8 @@ public class MarioEnemy extends SkelyEnemy{
         checkIfMove();
 
         move();
-
+        if(y<850)y=851; //bounds
+        
 
         if(isBeinghurt()){
             healthcounter++;
@@ -138,27 +171,6 @@ public class MarioEnemy extends SkelyEnemy{
                     return;
                 }
             }
-//            
-//            if(xMove==0&&yMove==0&&) {
-//            	if(x<handler.getWorld().getEntityManager().getPlayer().getX()) {
-//            		if(y<handler.getWorld().getEntityManager().getPlayer().getY()) {
-//            			xMove=speed;
-//            			yMove=speed;
-//            		}else {
-//            			xMove=speed;
-//                		yMove=-speed*3;
-//            		}
-//            	}else {
-//            		if(y<handler.getWorld().getEntityManager().getPlayer().getY()) {
-//            			xMove=-speed*3;
-//            			yMove=speed*3;
-//            		}else {
-//            			xMove=-speed*3;
-//                		yMove=-speed*3;
-//            		}
-//            	}
-//            }else {
-
             if (x >= handler.getWorld().getEntityManager().getPlayer().getX() - 8 && x <= handler.getWorld().getEntityManager().getPlayer().getX() + 8) {//nada
 
                 xMove = 0;
@@ -179,7 +191,7 @@ public class MarioEnemy extends SkelyEnemy{
             } else if (y > handler.getWorld().getEntityManager().getPlayer().getY()) {//move up
                 yMove = -speed;
             }
-//            }
+            
 
 
         } else {
@@ -203,63 +215,162 @@ public class MarioEnemy extends SkelyEnemy{
         }
     }
 
-	public void explosionArea(Graphics g) {
-		//buscar como meter el graphics
-		for(EntityBase e : handler.getWorld().getEntityManager().getEntities()) {
-		if(!e.equals(handler.getWorld().getEntityManager().getPlayer())) {	
-		try{if((e.getX()<x+area&&e.getX()>x-area)&&(e.getY()<y+area&&e.getY()>y-area)) {
-			e.die();
-		    g.drawImage(getCurrentAnimationFrame(explosion, null, null, null, Images.explosion, null, null, null), (int)(e.getX()), (int)(e.getY()), e.getWidth(), e.getHeight(), null);
-		}}catch(Exception x) {
-			area--;
-			explosionArea(g);
-		}}}
-		area=100;
-	}
-	@Override // meter explosionArea
+	@Override 
 	public void checkAttacks(){
         attackTimer += System.currentTimeMillis() - lastAttackTimer;
         lastAttackTimer = System.currentTimeMillis();
-        if(attackTimer < attackCooldown)
-            return;
+        if(attackTimer < attackCooldown) {
+        	readyFireAttack();
+        	FireBall=false;
+        	return;
+        }else FireBall=true;
+        	
 
-        Rectangle cb = getCollisionBounds(0, 0);
         Rectangle ar = new Rectangle();
-        int arSize = 20;
-        ar.width = arSize;
-        ar.height = arSize;
 
         if(lu){
-            ar.x = cb.x + cb.width / 2 - arSize / 2;
-            ar.y = cb.y - arSize;
+            ar.x = fx;
+            ar.y = fy;
+            ar.width=197;
+            ar.height=512;
         }else if(ld){
-            ar.x = cb.x + cb.width / 2 - arSize / 2;
-            ar.y = cb.y + cb.height;
+            ar.x = fx;
+            ar.y = fy;
+            ar.width=197;
+            ar.height=512;
         }else if(ll){
-            ar.x = cb.x - arSize;
-            ar.y = cb.y + cb.height / 2 - arSize / 2;
+            ar.x = fx;
+            ar.y = fy;
+            ar.width=512;
+            ar.height=197;
         }else if(lr){
-            ar.x = cb.x + cb.width;
-            ar.y = cb.y + cb.height / 2 - arSize / 2;
+            ar.x = fx;
+            ar.y = fy;
+            ar.width=512;
+            ar.height=197;
         }else{
             return;
         }
 
         attackTimer = 0;
+        
 
         for(EntityBase e : handler.getWorld().getEntityManager().getEntities()){
             if(e.equals(this))
                 continue;
             if(e.getCollisionBounds(0, 0).intersects(ar)){
-                e.hurt(attack);
+            	if(e.getHealth()<attack)e.setHealth(attack);
+            	e.hurt(attack);
                 System.out.println(e + " has " + e.getHealth() + " lives.");
+            	exploded = e;
+                isExplosion=true;
                 return;
             }
         }
 
     }
 
+	private BufferedImage getCurrentFireAnimationFrame(){
 
+        if(LaunchedFireBallR){
+
+            return animFireATTR.getCurrentFrame();
+
+        }else if(LaunchedFireBallD){
+
+            return animFireATTD.getCurrentFrame();
+
+        }else if(LaunchedFireBallU){
+
+            return animFireATTU.getCurrentFrame();
+
+        }else{   //ll
+
+            return animFireATT.getCurrentFrame();
+        }
+
+
+    }
+	public void readyFireAttack(){
+        LaunchedFireBall=true;
+        movexp =(int) (x - handler.getGameCamera().getxOffset()) + 48;
+        moveyp =(int) (y - handler.getGameCamera().getyOffset()) + 64;
+        movexn =(int) (x - handler.getGameCamera().getxOffset()) - 48;
+        moveyn =(int) (y - handler.getGameCamera().getyOffset()) - 64;
+        tempmovexp =(int) (x - handler.getGameCamera().getxOffset()) + 48;
+        tempmoveyp =(int) (y - handler.getGameCamera().getyOffset()) + 64;
+        tempmovexn =(int) (x - handler.getGameCamera().getxOffset()) - 48;
+        tempmoveyn =(int) (y - handler.getGameCamera().getyOffset()) - 64;
+        LaunchedFireBallL=false;
+        LaunchedFireBallR=false;
+        LaunchedFireBallU=false;
+        LaunchedFireBallD=false;
+        fy=(int) (y - handler.getGameCamera().getyOffset()) + (height / 2);
+        fx=(int) (x - handler.getGameCamera().getxOffset()) + 16;
+    }
+	
+	private void MarioFireBallAttack(Graphics g) {
+
+
+        if (lr&&LaunchedFireBall&&!LaunchedFireBallL&&!LaunchedFireBallR&&!LaunchedFireBallD&&!LaunchedFireBallU) {
+            LaunchedFireBall=false;
+            LaunchedFireBallL=false;
+            LaunchedFireBallR=true;
+            LaunchedFireBallU=false;
+            LaunchedFireBallD=false;
+
+        } else if (ld&&LaunchedFireBall&&!LaunchedFireBallL&&!LaunchedFireBallR&&!LaunchedFireBallD&&!LaunchedFireBallU) {
+            LaunchedFireBall=false;
+            LaunchedFireBallL=false;
+            LaunchedFireBallR=false;
+            LaunchedFireBallU=false;
+            LaunchedFireBallD=true;
+
+        } else if (lu&&LaunchedFireBall&&!LaunchedFireBallL&&!LaunchedFireBallR&&!LaunchedFireBallD&&!LaunchedFireBallU) {
+            LaunchedFireBall=false;
+            LaunchedFireBallL=false;
+            LaunchedFireBallR=false;
+            LaunchedFireBallU=true;
+            LaunchedFireBallD=false;
+
+        } else if(ll&&LaunchedFireBall&&!LaunchedFireBallL&&!LaunchedFireBallR&&!LaunchedFireBallD&&!LaunchedFireBallU) {
+            LaunchedFireBall=false;
+            LaunchedFireBallL=true;
+            LaunchedFireBallR=false;
+            LaunchedFireBallU=false;
+            LaunchedFireBallD=false;
+
+        }
+        if (LaunchedFireBallR) {
+            movexp+=FireSpeed;
+            g.drawImage(getCurrentFireAnimationFrame(), movexp, fy, 64, 32, null);
+            if(movexp >= tempmovexp + 64*2){
+                FireBall=false;
+                attacking=false;
+            }
+        } else if (LaunchedFireBallD) {
+            moveyp+=FireSpeed;
+            g.drawImage(getCurrentFireAnimationFrame(), fx-6, moveyp, 32, 64, null);
+            if(moveyp >= tempmoveyp + 64*2){
+                FireBall=false;
+                attacking=false;
+            }
+        } else if (LaunchedFireBallU) {
+            moveyn-=FireSpeed;
+            g.drawImage(getCurrentFireAnimationFrame(), fx, moveyn, 32, 64, null);
+            if(moveyn <= tempmoveyn - 64*2){
+                FireBall=false;
+                attacking=false;
+            }
+        } else if(LaunchedFireBallL) {   //ll
+            movexn-=FireSpeed;
+            g.drawImage(getCurrentFireAnimationFrame(), movexn, fy, 64, 32, null);
+            if(movexn <= tempmovexn - 64*2){
+                FireBall=false;
+                attacking=false;
+            }
+        }
+	}
 
 
     @Override
@@ -267,4 +378,9 @@ public class MarioEnemy extends SkelyEnemy{
     		System.out.println("ded");
     		handler.getWorld().getItemManager().addItem(Item.newSkullItem.createNew((int)x + bounds.x + (randint.nextInt(96) -32),(int)y + bounds.y+(randint.nextInt(32) -32),(randint.nextInt(3) +1)));
     }
+
+	
+	public void fire() {
+		
+	}
 }
