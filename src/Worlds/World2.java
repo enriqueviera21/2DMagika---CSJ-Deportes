@@ -93,7 +93,8 @@ public class World2 extends BaseWorld{
     	//Win Condition
     	if (((entityManager.getPlayer().getX() > 575) && (entityManager.getPlayer().getX() < 650))
     			&& ((entityManager.getPlayer().getY() > 940) && (entityManager.getPlayer().getY() < 1025))
-    			&& (handler.getWorld().getEntityManager().getPlayer().checkIfHasWinLevel2())) {
+    			&& (handler.getWorld().getEntityManager().getPlayer().checkIfHasWinLevel2())
+    			&& MarioEnemy.isDead) {
 //    		if (!hasWon) {
     			JOptionPane.showMessageDialog(null, "You win!");
     			System.exit(0);
@@ -129,6 +130,7 @@ public class World2 extends BaseWorld{
         g.setFont(new Font("Lucida", Font.BOLD, 22));//This is the default one so we can add string to other things.
 		g.drawString("You need to kill all enemies and collect the white loot bag!", 100, 90);
 		g.drawString("Checkpoint is marked by 4 dirt blocks.", 200, 120);
+		g.drawString("Kill the boss!", 325, 150);
 
     }
 

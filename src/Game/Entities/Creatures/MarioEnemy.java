@@ -17,9 +17,8 @@ import Resources.Animation;
 import Resources.Images;
 
 public class MarioEnemy extends SkelyEnemy{
-	private Animation animDown, animUp, animLeft, animRight,explosion;
+	private Animation animDown, animUp, animLeft, animRight;
 
-    private Boolean attacking=false;
 
     private int animWalkingSpeed = 150;
     private Inventory Marioinventory;
@@ -30,34 +29,19 @@ public class MarioEnemy extends SkelyEnemy{
     private Random randint;
     private int moveCount=0;
     private int direction;
-    private int area=100;
-    
-    private Animation animFireATT,animFireATTR,animFireATTU,animFireATTD;
-    private Boolean fcactive=true;
-    private Boolean FireBall=false;
-    private Boolean LaunchedFireBall=false;
-    private Boolean LaunchedFireBallL=false;
-    private Boolean LaunchedFireBallR=false;
-    private Boolean LaunchedFireBallU=false;
-    private Boolean LaunchedFireBallD=false;
-    private EntityBase exploded;
-    private Boolean isExplosion=false;
-    private int animFireSpeed = 250;
-    private int FireSpeed = 2;
-    private int FireMove = 0;
-    private int movexp,moveyp,movexn,moveyn,tempmoveyp,tempmovexn,tempmoveyn,tempmovexp,fy,fx;
-
+    public static Boolean isDead=false;
+        	
     public MarioEnemy(Handler handler, float x, float y) {
         super(handler, x, y);
-        attackCooldown=800;
+        attackCooldown=2000;
         bounds.x=8*2;
         bounds.y=18*2;
         bounds.width=16*2;
         bounds.height=14*2;
         speed=1.5f;
-        health=1;
-
+        health=20;
         MarioCam= new Rectangle();
+        attack = 20;
 
 
 
@@ -68,11 +52,6 @@ public class MarioEnemy extends SkelyEnemy{
         animLeft = new Animation(animWalkingSpeed,Images.mario_left);
         animRight = new Animation(animWalkingSpeed,Images.mario_right);
         animUp = new Animation(animWalkingSpeed,Images.mario_back);
-        explosion = new Animation(100, Images.explosion);
-        animFireATT = new Animation(animFireSpeed,Images.FireBallLeft);
-        animFireATTR = new Animation(animFireSpeed,Images.FireBallRight);
-        animFireATTU = new Animation(animFireSpeed,Images.FireBallUp);
-        animFireATTD = new Animation(animFireSpeed,Images.FireBallDown);
 
         Marioinventory= new Inventory(handler);
     }
@@ -81,14 +60,23 @@ public class MarioEnemy extends SkelyEnemy{
         g.drawImage(getCurrentAnimationFrame(animDown,animUp,animLeft,animRight,Images.mario_front,Images.mario_back,Images.mario_left,Images.mario_right), (int) (x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), width, height, null);
         if(isBeinghurt() && healthcounter<=120){
             g.setColor(Color.white);
-            g.drawString("SkelyHealth: " + getHealth(),(int) (x-handler.getGameCamera().getxOffset()),(int) (y-handler.getGameCamera().getyOffset()-20));
+            g.drawString("Mario Health: " + getHealth(),(int) (x-handler.getGameCamera().getxOffset()),(int) (y-handler.getGameCamera().getyOffset()-20));
+            g.setColor(Color.BLACK);
+            g.drawRect((int)(x-handler.getGameCamera().getxOffset()-1),(int)(y-handler.getGameCamera().getyOffset()-21),76,11);
+            if(this.getHealth()>=16){
+                g.setColor(Color.GREEN);
+                g.fillRect((int)(x-handler.getGameCamera().getxOffset()),(int)(y-handler.getGameCamera().getyOffset()-20),(int) (getHealth()*4.68),10);
+
+            }else if(this.getHealth()>=6 && getHealth()<16){
+                g.setColor(Color.YELLOW);
+                g.fillRect((int)(x-handler.getGameCamera().getxOffset()),(int)(y-handler.getGameCamera().getyOffset()-20),(int) (getHealth() * 4.68),10);
+
+            }else if(this.getHealth() < 5){
+                g.setColor(Color.RED);
+                g.fillRect((int)(x-handler.getGameCamera().getxOffset()),(int)(y-handler.getGameCamera().getyOffset()-20),(int) (getHealth() * 4.68),10);
+
+            }
         }
-        if(FireBall) {
-        	MarioFireBallAttack(g);
-        }
-//        if(isExplosion){
-//		    g.drawImage(getCurrentAnimationFrame(explosion, explosion, explosion, explosion, Images.explosion, null, null, null), (int)(exploded.getX()), (int)(exploded.getY()), exploded.getWidth(), exploded.getHeight(), null);
-//        }
     }
     @Override
     public void tick() {
@@ -96,10 +84,6 @@ public class MarioEnemy extends SkelyEnemy{
         animUp.tick();
         animRight.tick();
         animLeft.tick();
-        animFireATT.tick();
-        animFireATTR.tick();
-        animFireATTU.tick();
-        animFireATTD.tick();
 
         moveCount ++;
         if(moveCount>=60){
@@ -107,6 +91,7 @@ public class MarioEnemy extends SkelyEnemy{
             direction = randint.nextInt(4) + 1;
         }
         checkIfMove();
+        checkAttacks();
 
         move();
         if(y<850)y=851; //bounds
@@ -165,11 +150,6 @@ public class MarioEnemy extends SkelyEnemy{
             for (EntityBase e : handler.getWorld().getEntityManager().getEntities()) {
                 if (e.equals(this))
                     continue;
-                if (e.getCollisionBounds(0, 0).intersects(ar) && e.equals(handler.getWorld().getEntityManager().getPlayer())) {
-
-                    checkAttacks();
-                    return;
-                }
             }
             if (x >= handler.getWorld().getEntityManager().getPlayer().getX() - 8 && x <= handler.getWorld().getEntityManager().getPlayer().getX() + 8) {//nada
 
@@ -214,173 +194,58 @@ public class MarioEnemy extends SkelyEnemy{
             }
         }
     }
-
-	@Override 
-	public void checkAttacks(){
+    
+    public void checkAttacks(){
         attackTimer += System.currentTimeMillis() - lastAttackTimer;
         lastAttackTimer = System.currentTimeMillis();
-        if(attackTimer < attackCooldown) {
-        	readyFireAttack();
-        	FireBall=false;
-        	return;
-        }else FireBall=true;
-        	
+        if(attackTimer < attackCooldown)
+            return;
 
+        Rectangle cb = getCollisionBounds(0, 0);
         Rectangle ar = new Rectangle();
+        int arSize = 20;
+        ar.width = arSize;
+        ar.height = arSize;
 
         if(lu){
-            ar.x = fx;
-            ar.y = fy;
-            ar.width=197;
-            ar.height=512;
+            ar.x = cb.x + cb.width / 2 - arSize / 2;
+            ar.y = cb.y - arSize;
         }else if(ld){
-            ar.x = fx;
-            ar.y = fy;
-            ar.width=197;
-            ar.height=512;
+            ar.x = cb.x + cb.width / 2 - arSize / 2;
+            ar.y = cb.y + cb.height;
         }else if(ll){
-            ar.x = fx;
-            ar.y = fy;
-            ar.width=512;
-            ar.height=197;
+            ar.x = cb.x - arSize;
+            ar.y = cb.y + cb.height / 2 - arSize / 2;
         }else if(lr){
-            ar.x = fx;
-            ar.y = fy;
-            ar.width=512;
-            ar.height=197;
+            ar.x = cb.x + cb.width;
+            ar.y = cb.y + cb.height / 2 - arSize / 2;
         }else{
             return;
         }
 
         attackTimer = 0;
-        
 
         for(EntityBase e : handler.getWorld().getEntityManager().getEntities()){
             if(e.equals(this))
                 continue;
             if(e.getCollisionBounds(0, 0).intersects(ar)){
-            	if(e.getHealth()<attack)e.setHealth(attack);
-            	e.hurt(attack);
+                e.hurt(attack);
                 System.out.println(e + " has " + e.getHealth() + " lives.");
-            	exploded = e;
-                isExplosion=true;
+                if(e.equals(handler.getWorld().getEntityManager().getPlayer()))
+                	handler.getWorld().getEntityManager().getPlayer().speed--;
                 return;
             }
         }
 
     }
 
-	private BufferedImage getCurrentFireAnimationFrame(){
-
-        if(LaunchedFireBallR){
-
-            return animFireATTR.getCurrentFrame();
-
-        }else if(LaunchedFireBallD){
-
-            return animFireATTD.getCurrentFrame();
-
-        }else if(LaunchedFireBallU){
-
-            return animFireATTU.getCurrentFrame();
-
-        }else{   //ll
-
-            return animFireATT.getCurrentFrame();
-        }
-
-
-    }
-	public void readyFireAttack(){
-        LaunchedFireBall=true;
-        movexp =(int) (x - handler.getGameCamera().getxOffset()) + 48;
-        moveyp =(int) (y - handler.getGameCamera().getyOffset()) + 64;
-        movexn =(int) (x - handler.getGameCamera().getxOffset()) - 48;
-        moveyn =(int) (y - handler.getGameCamera().getyOffset()) - 64;
-        tempmovexp =(int) (x - handler.getGameCamera().getxOffset()) + 48;
-        tempmoveyp =(int) (y - handler.getGameCamera().getyOffset()) + 64;
-        tempmovexn =(int) (x - handler.getGameCamera().getxOffset()) - 48;
-        tempmoveyn =(int) (y - handler.getGameCamera().getyOffset()) - 64;
-        LaunchedFireBallL=false;
-        LaunchedFireBallR=false;
-        LaunchedFireBallU=false;
-        LaunchedFireBallD=false;
-        fy=(int) (y - handler.getGameCamera().getyOffset()) + (height / 2);
-        fx=(int) (x - handler.getGameCamera().getxOffset()) + 16;
-    }
-	
-	private void MarioFireBallAttack(Graphics g) {
-
-
-        if (lr&&LaunchedFireBall&&!LaunchedFireBallL&&!LaunchedFireBallR&&!LaunchedFireBallD&&!LaunchedFireBallU) {
-            LaunchedFireBall=false;
-            LaunchedFireBallL=false;
-            LaunchedFireBallR=true;
-            LaunchedFireBallU=false;
-            LaunchedFireBallD=false;
-
-        } else if (ld&&LaunchedFireBall&&!LaunchedFireBallL&&!LaunchedFireBallR&&!LaunchedFireBallD&&!LaunchedFireBallU) {
-            LaunchedFireBall=false;
-            LaunchedFireBallL=false;
-            LaunchedFireBallR=false;
-            LaunchedFireBallU=false;
-            LaunchedFireBallD=true;
-
-        } else if (lu&&LaunchedFireBall&&!LaunchedFireBallL&&!LaunchedFireBallR&&!LaunchedFireBallD&&!LaunchedFireBallU) {
-            LaunchedFireBall=false;
-            LaunchedFireBallL=false;
-            LaunchedFireBallR=false;
-            LaunchedFireBallU=true;
-            LaunchedFireBallD=false;
-
-        } else if(ll&&LaunchedFireBall&&!LaunchedFireBallL&&!LaunchedFireBallR&&!LaunchedFireBallD&&!LaunchedFireBallU) {
-            LaunchedFireBall=false;
-            LaunchedFireBallL=true;
-            LaunchedFireBallR=false;
-            LaunchedFireBallU=false;
-            LaunchedFireBallD=false;
-
-        }
-        if (LaunchedFireBallR) {
-            movexp+=FireSpeed;
-            g.drawImage(getCurrentFireAnimationFrame(), movexp, fy, 64, 32, null);
-            if(movexp >= tempmovexp + 64*2){
-                FireBall=false;
-                attacking=false;
-            }
-        } else if (LaunchedFireBallD) {
-            moveyp+=FireSpeed;
-            g.drawImage(getCurrentFireAnimationFrame(), fx-6, moveyp, 32, 64, null);
-            if(moveyp >= tempmoveyp + 64*2){
-                FireBall=false;
-                attacking=false;
-            }
-        } else if (LaunchedFireBallU) {
-            moveyn-=FireSpeed;
-            g.drawImage(getCurrentFireAnimationFrame(), fx, moveyn, 32, 64, null);
-            if(moveyn <= tempmoveyn - 64*2){
-                FireBall=false;
-                attacking=false;
-            }
-        } else if(LaunchedFireBallL) {   //ll
-            movexn-=FireSpeed;
-            g.drawImage(getCurrentFireAnimationFrame(), movexn, fy, 64, 32, null);
-            if(movexn <= tempmovexn - 64*2){
-                FireBall=false;
-                attacking=false;
-            }
-        }
-	}
-
 
     @Override
     public void die() {
-    		System.out.println("ded");
-    		handler.getWorld().getItemManager().addItem(Item.newSkullItem.createNew((int)x + bounds.x + (randint.nextInt(96) -32),(int)y + bounds.y+(randint.nextInt(32) -32),(randint.nextInt(3) +1)));
+    		handler.getWorld().getItemManager().addItem(Item.fireRuneItem.createNew((int)x + bounds.x + (randint.nextInt(96) -32),(int)y + bounds.y+(randint.nextInt(32) -32),(randint.nextInt(3) +3)));
+        	handler.getWorld().getEntityManager().getPlayer().speed=3;
+        	isDead=true;
     }
 
-	
-	public void fire() {
-		
-	}
+
 }
